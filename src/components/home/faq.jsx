@@ -5,7 +5,7 @@ import { BsCaretRightSquare } from "react-icons/bs";
 function Faq() {
   const [questions, setquestions] = useState([
     {
-      question: "What is commissionsfunnels ?",
+      question: "What is gofitish ?",
       answer: ` Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit
       minima vero excepturi tempora facilis quam, accusantium quae`,
       isOpen: false,
