@@ -12,8 +12,10 @@ import Transactions from "./pages/creatores/transactions";
 import Videos from "./pages/creatores/videos/videos";
 import Signup from "./pages/signup";
 import Upload from "./pages/creatores/Videos/upload";
-import Podcasts from "./pages/creatores/podcast";
+import Podcasts from "./pages/creatores/podcast/podcast";
 import Orders from "./pages/creatores/orders";
+import Uploadpodcast from "./pages/creatores/podcast/uploadPodcast";
+
 function App() {
   return (
     <BrowserRouter>
@@ -35,6 +37,7 @@ function App() {
         />
         <Route path="/creatores/orders" element={<Orders />} />
         <Route path="/creatores/podcasts" element={<Podcasts />} />
+        <Route path="/creatores/podcasts/upload" element={<Uploadpodcast />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Layout from "../../components/creatores/layout";
+import Layout from "../../../components/creatores/layout";
 import { FcAreaChart } from "react-icons/fc";
-import Podcast from "../../components/creatores/podcast/podcast";
-import poster from "../../assets/images/sales-funnel.png";
-import audio1 from "../../assets/audio/audio1.mp3";
-import audio2 from "../../assets/audio/audio2.mp3";
+import Podcast from "../../../components/creatores/podcast/podcast";
+import poster from "../../../assets/images/sales-funnel.png";
+import audio1 from "../../../assets/audio/audio1.mp3";
+import audio2 from "../../../assets/audio/audio2.mp3";
 
 function Podcasts() {
   const [pod, setpod] = useState([
@@ -76,7 +76,7 @@ function Podcasts() {
               <h6>Podcast</h6>
             </Link>
           </h5>
-          <Link to="/creatores/podcast/upload" className="ml-4">
+          <Link to="/creatores/podcasts/upload" className="ml-4">
             <button className="w-fit flex bg-slate-900 text-white px-2 py-1 mx-auto flex items-center justify-center items-center hover:bg-white border-[.1rem] hover:border-slate-900 hover:text-yellow-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
