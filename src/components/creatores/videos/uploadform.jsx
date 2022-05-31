@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Uploadform() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -13,8 +15,34 @@ function Uploadform() {
   const [category, setcategory] = useState("");
   const [description, setdescription] = useState("");
 
+  const notifyWarning = (msg) => {
+    toast.warn(`${msg}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const notifySucess = (msg) => {
+    toast.success(`${msg}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   const uploadVideo = (e) => {
     e.preventDefault();
+
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     setisloading(true);
 
@@ -24,21 +52,24 @@ function Uploadform() {
     formData.append("video", video);
     formData.append("category", category);
     formData.append("description", description);
-    formData.append("uploader_id", "1sw4ewsw");
-    formData.append("uploader_name", "gofitish creatores");
+    //formData.append("uploader_id", user.user_id);
+    formData.append("uploader_id", user.id);
+    formData.append("uploader_name", user.shop_name);
 
     axios
       .post(`${API_URL}videos/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       })
       .then((res) => {
         console.log(res);
+        notifySucess(res.data.message);
       })
       .catch((err) => {
         console.log(err);
+        notifyWarning(err.response.data.message);
       })
       .finally(() => {
         setisloading(false);
@@ -49,6 +80,17 @@ function Uploadform() {
 
   return (
     <div className="shadow p-3 h-fit">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <form onSubmit={(e) => uploadVideo(e)}>
         <>
           <div className="w-full px-3 mb-6">

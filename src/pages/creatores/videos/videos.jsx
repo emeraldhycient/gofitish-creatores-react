@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../../components/creatores/layout";
 import Stat from "../../../components/creatores/Videos/stat";
@@ -9,60 +10,65 @@ import Video from "../../../components/creatores/videos/video";
 import excercise from "../../../assets/videos/Exercise.mp4";
 import poster from "../../../assets/images/sales.png";
 
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function Videos() {
-  const videos = [
-    {
-      id: 1,
-      title: "Exercise for optimal health",
-      poster: poster,
-      video_url: excercise,
-      views: "1,000,000",
-      channel_id: "Creator",
-    },
-    {
-      id: 2,
-      title: "Exercise for optimal health",
-      poster: poster,
-      video_url: excercise,
-      views: "1,000,000",
-      channel_id: "Creator",
-    },
-    {
-      id: 3,
-      title: "Exercise for optimal health",
-      poster: poster,
-      video_url: excercise,
-      views: "1,000,000",
-      channel_id: "Creator",
-    },
-    {
-      id: 4,
-      title: "Exercise for optimal health",
-      poster: poster,
-      video_url: excercise,
-      views: "1,000,000",
-      channel_id: "Creator",
-    },
-    {
-      id: 5,
-      title: "Exercise for optimal health",
-      poster: poster,
-      video_url: excercise,
-      views: "1,000,000",
-      channel_id: "Creator",
-    },
-    {
-      id: 6,
-      title: "Exercise for optimal health",
-      poster: poster,
-      video_url: excercise,
-      views: "1,000,000",
-      channel_id: "Creator",
-    },
-  ];
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const [isloading, setisloading] = useState(false);
+  const [videos, setvideos] = useState([]);
+
+  const notifyWarning = (msg) => {
+    toast.warn(`${msg}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  useEffect(() => {
+    setisloading(true);
+    const token = sessionStorage.getItem("token");
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    axios
+      .get(`${API_URL}videos/user/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setvideos(res.data.videos);
+      })
+      .catch((err) => {
+        console.log(err);
+        notifyWarning(err.response.data.message);
+      })
+      .finally(() => {
+        setisloading(false);
+      });
+  }, []);
 
   return (
     <Layout>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="flex justify-between items-center mb-4">
         <h5 className="text-slate-900 text-sm my-4 hover:text-yellow-500">
           <Link to="/creatores/Videos" className="flex items-center ">
@@ -129,9 +135,15 @@ function Videos() {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 mt-4">
-        {videos.map((video) => (
-          <Video key={video.id} video={video} />
-        ))}
+        {videos.length > 0 ? (
+          videos.map((video) => <Video key={video.id} video={video} />)
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <h1 className="text-center text-slate-900 text-3xl">
+              No Videos Yet
+            </h1>
+          </div>
+        )}
       </div>
     </Layout>
   );
