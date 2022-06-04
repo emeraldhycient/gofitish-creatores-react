@@ -1,5 +1,6 @@
+import { ToastContainer, toast } from "react-toastify";
 import Layout from "../../../components/creatores/layout";
-import Uploadform from "../../../components/creatores/Videos/uploadform";
+import UploadPodcast from "../../../components/creatores/podcast/uploadform";
 
 function Uploadpodcast() {
   return (
@@ -8,7 +9,18 @@ function Uploadpodcast() {
         <div className="text-center bg-slate-900 text-gray-100 py-1">
           <p>Upload podcast courses</p>
         </div>
-        <Uploadform />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <UploadPodcast />
       </div>
     </Layout>
   );

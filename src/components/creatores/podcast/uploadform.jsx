@@ -1,19 +1,46 @@
 import { useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function Uploadform() {
+function UploadPodcast() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  const notifyWarning = (msg) => {
+    toast.warn(`${msg}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const notifySucess = (msg) => {
+    toast.success(`${msg}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
   const [isloading, setisloading] = useState(false);
 
   const [title, settitle] = useState("");
   const [poster, setposter] = useState("");
-  const [video, setvideo] = useState("");
+  const [podcast, setpodcast] = useState("");
   const [category, setcategory] = useState("");
   const [description, setdescription] = useState("");
 
-  const uploadVideo = (e) => {
+  const uploadpodcast = (e) => {
     e.preventDefault();
 
     setisloading(true);
@@ -21,24 +48,27 @@ function Uploadform() {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("poster", poster);
-    formData.append("video", video);
+    formData.append("podcast", podcast);
     formData.append("category", category);
     formData.append("description", description);
-    formData.append("uploader_id", "1sw4ewsw");
-    formData.append("uploader_name", "gofitish creatores");
+    formData.append("uploader_id", user.user_id);
+    //formData.append("uploader_id", user.id);
+    formData.append("uploader_name", user.shop_name);
 
     axios
-      .post(`${API_URL}videos/upload`, formData, {
+      .post(`${API_URL}podcasts/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
+        notifySucess(res.data.message);
       })
       .catch((err) => {
         console.log(err);
+        notifyWarning(err.response.data.message);
       })
       .finally(() => {
         setisloading(false);
@@ -49,7 +79,18 @@ function Uploadform() {
 
   return (
     <div className="shadow p-3 h-fit">
-      <form onSubmit={(e) => uploadVideo(e)}>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <form onSubmit={(e) => uploadpodcast(e)}>
         <>
           <div className="w-full px-3 mb-6">
             <label
@@ -74,7 +115,7 @@ function Uploadform() {
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="file"
-              placeholder="cover image to be displayed before video plays"
+              placeholder="cover image to be displayed before podcast plays"
               onChange={(e) => setposter(e.target.files[0])}
               accept="image/*"
               required
@@ -83,14 +124,14 @@ function Uploadform() {
 
           <div className="w-full px-3 mb-6">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-              Video course
+              podcast Audio
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="file"
-              placeholder="video course to be uploaded"
-              onChange={(e) => setvideo(e.target.files[0])}
-              accept="video/mp4,video/x-m4v,video/*"
+              placeholder="podcast course to be uploaded"
+              onChange={(e) => setpodcast(e.target.files[0])}
+              accept=".mp3,audio/*"
               required
             />
           </div>
@@ -145,4 +186,4 @@ function Uploadform() {
   );
 }
 
-export default Uploadform;
+export default UploadPodcast;

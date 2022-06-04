@@ -38,13 +38,13 @@ function Videos() {
     const user = JSON.parse(sessionStorage.getItem("user"));
 
     axios
-      .get(`${API_URL}videos/user/${user.id}`, {
+      .get(`${API_URL}videos/user/${user.user_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setvideos(res.data.videos);
       })
       .catch((err) => {
@@ -112,22 +112,22 @@ function Videos() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 mt-4">
         <Stat
-          name="products"
-          total={34246}
+          name="Videos"
+          total={videos.length}
           icon={<RiStore3Line size={25} className="text-[#ffce1a] mr-2" />}
         />
         <Stat
-          name="sold"
+          name="views"
           total={34575}
           icon={<BiTransfer size={25} className="text-[#ffce1a] mr-2" />}
         />
         <Stat
-          name="Earnings"
+          name="Likes"
           total={367854}
           icon={<FcMoneyTransfer size={25} className="text-[#ffce1a] mr-2" />}
         />
         <Stat
-          name="products"
+          name="comments"
           total={397864}
           icon={
             <BsFillCartCheckFill size={25} className="text-[#ffce1a] mr-2" />

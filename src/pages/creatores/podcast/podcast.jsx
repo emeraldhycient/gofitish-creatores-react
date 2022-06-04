@@ -1,60 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../../components/creatores/layout";
 import { FcAreaChart } from "react-icons/fc";
 import Podcast from "../../../components/creatores/podcast/podcast";
-import poster from "../../../assets/images/sales-funnel.png";
-import audio1 from "../../../assets/audio/audio1.mp3";
-import audio2 from "../../../assets/audio/audio2.mp3";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Podcasts() {
-  const [pod, setpod] = useState([
-    {
-      title: "First Video on Hammer      ",
-      poster: poster,
-      channel_id: "creatores crew",
-      audio_url: audio1,
-      listens: 23,
-    },
-    {
-      title: "Random explainer on indoor",
-      poster: poster,
-      channel_id: "creatores crew",
-      audio_url: audio2,
-      listens: 34,
-    },
-    {
-      title: "waist trainer using dumbbell",
-      poster: poster,
-      channel_id: "creatores crew",
-      audio_url: audio1,
-      listens: 45,
-    },
-    {
-      title: "belle belt doesnt burn fat",
-      poster: poster,
-      channel_id: "creatores crew",
-      audio_url: audio2,
-      listens: 25,
-    },
-    {
-      title: "eating after 7 should be considered suicidal",
-      poster: poster,
-      channel_id: "creatores crew",
-      audio_url: audio2,
-      listens: 35,
-    },
-    {
-      title: "i dont know what else to use",
-      poster: poster,
-      channel_id: "creatores crew",
-      audio_url: audio1,
-      listens: 24,
-    },
-  ]);
+  const API_URL = import.meta.env.VITE_API_URL;
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  const notifyWarning = (msg) => {
+    toast.warn(`${msg}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const [pod, setpod] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}podcasts/user/${user.user_id}`)
+      .then((res) => {
+        setpod(res.data.podcasts);
+      })
+      .catch((err) => {
+        console.log(err);
+        notifyWarning(err.response.data.message);
+      });
+  }, []);
 
   return (
     <Layout>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <section className="p-3">
         <div className="flex justify-between items-center mb-4">
           <h5 className="text-slate-900 text-sm my-4 hover:text-yellow-500">
@@ -97,7 +92,7 @@ function Podcasts() {
           </Link>
         </div>
       </section>
-      <section className="mx-6 w-10/12 mx-auto mb-4">
+      <section className=" md:w-10/12 md:mx-auto mb-4">
         <h1 className="text-base text-gray-500 font-bold mb-2 flex">
           Podcasts <FcAreaChart size={22} />
         </h1>
@@ -110,6 +105,8 @@ function Podcasts() {
               <th className="text-slate-900 text-left">Author</th>
               <th className="text-slate-900 text-left">Time</th>
               <th className="text-slate-900 text-left">Listens</th>
+              <th className="text-slate-900 text-left">Delete</th>
+              <th className="text-slate-900 text-left">Edit</th>
             </tr>
           </thead>
           <tbody>

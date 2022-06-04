@@ -5,7 +5,7 @@ import Sidebar from "./sidebar";
 function Layout({ children }) {
   return (
     <section>
-      <div className="grid grid-cols-1 md:grid-cols-8 h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-8 h-screen bg-gray-100">
         <div className="sticky md:static bottom-0  bg-slate-900  md:pt-[4rem] h-fit md:h-screen order-last md:order-first">
           <Sidebar />
         </div>

@@ -52,8 +52,8 @@ function Uploadform() {
     formData.append("video", video);
     formData.append("category", category);
     formData.append("description", description);
-    //formData.append("uploader_id", user.user_id);
-    formData.append("uploader_id", user.id);
+    formData.append("uploader_id", user.user_id);
+    //formData.append("uploader_id", user.id);
     formData.append("uploader_name", user.shop_name);
 
     axios
@@ -64,7 +64,7 @@ function Uploadform() {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         notifySucess(res.data.message);
       })
       .catch((err) => {

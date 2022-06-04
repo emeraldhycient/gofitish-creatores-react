@@ -51,7 +51,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between shadow">
       <ul className="mx-5 md:mx-auto flex md:block justify-between items-center">
         <li className="text-gray-300 text-sm my-4 hover:text-yellow-500">
           <Link to="/creatores/dashboard" className="flex items-center ">
